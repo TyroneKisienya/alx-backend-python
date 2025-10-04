@@ -34,3 +34,4 @@ def batch_processing(batch_size):
         filtered = [user for user in batch if float(user['age']) > 25]
         print(f'processed batch with {len(filtered)} users over 25')
         yield filtered
+    return
