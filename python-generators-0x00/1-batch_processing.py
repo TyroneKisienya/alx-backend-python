@@ -23,6 +23,8 @@ def stream_users_in_batches(batch_size):
             if len(batch) == batch_size:
                 yield batch
                 batch = []
+            if batch:
+                yield batch
         cursor.close()
         conn.close()
     
