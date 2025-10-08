@@ -16,7 +16,6 @@ class DatabaseConnection:
     
 with DatabaseConnection('users.db') as conn:
     cursor = conn.cursor()
-    query = 'SELECT * from users'
-    cursor.execute(query)
+    cursor.execute('SELECT * FROM users')
     results = cursor.fetchall()
     print(f'Query results:', results)
