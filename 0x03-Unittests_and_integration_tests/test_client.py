@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""
+Unittests for the client.GithubOrgClient class.
+
+Covers:
+- org()
+- _public_repos_url
+- public_repos()
+"""
 
 from client import GithubOrgClient
 import unittest
