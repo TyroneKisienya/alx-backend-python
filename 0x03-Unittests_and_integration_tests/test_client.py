@@ -98,7 +98,7 @@ class TestintegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up requests.get patcher"""
-        def mock_get(url, *args, **kwargs):
+        def mock_get(url):
             mock_resp = Mock()
             if url == f"https://api.github.com/orgs/google":
                 mock_resp.json.return_value = cls.org_payload
