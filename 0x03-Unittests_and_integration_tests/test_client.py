@@ -96,23 +96,23 @@ class TestGithubOrgClient(unittest.TestCase):
 class TestintegrationGithubOrgClient(unittest.TestCase):
     '''Integration test for the org_client'''
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         """Set up requests.get patcher"""
         def mock_get(url, *args, **kwargs):
             mock_resp = Mock()
             if url == f"https://api.github.com/orgs/google":
-                mock_resp.json.return_value = self.org_payload
-            elif url == self.org_payload["repos_url"]:
-                mock_resp.json.return_value = self.repos_payload
+                mock_resp.json.return_value = cls.org_payload
+            elif url == cls.org_payload["repos_url"]:
+                mock_resp.json.return_value = cls.repos_payload
             return mock_resp
 
-        self.get_patcher = patch("requests.get", side_effect=mock_get)
-        self.get_patcher.start()
+        cls.get_patcher = patch("requests.get", side_effect=mock_get)
+        cls.get_patcher.start()
 
     @classmethod
-    def tearDownClass(self):
+    def tearDownClass(cls):
         '''stop patcher'''
-        self.get_patcher.stop()
+        cls.get_patcher.stop()
 
     def test_public_repos(self):
         '''test for expected repository'''
