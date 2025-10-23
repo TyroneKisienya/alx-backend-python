@@ -93,10 +93,8 @@ class TestGithubOrgClient(unittest.TestCase):
         "apache2_repos": apache2_repos,
     }
 ])
-
 class TestintegrationGithubOrgClient(unittest.TestCase):
     '''Integration test for the org_client'''
-    
     @classmethod
     def setUpClass(cls):
         """Set up requests.get patcher"""
@@ -115,16 +113,17 @@ class TestintegrationGithubOrgClient(unittest.TestCase):
     def tearDownClass(cls):
         '''stop patcher'''
         cls.get_patcher.stop()
-    
+
     def test_public_repos(self):
         '''test for expected repository'''
         client = GithubOrgClient('google')
         self.assertEqual(client.public_repos(), self.expected_repos)
-    
+
     def test_public_repos_with_license(self):
         '''test for values with only Apache license'''
         client = GithubOrgClient('google')
-        self.assertEqual(client.public_repos(license="apache-2.0"), self.apache2_repos)
+        self.assertEqual(client.public_repos(license="apache-2.0"),
+                         self.apache2_repos)
 
 
 if __name__ == "__main__":
