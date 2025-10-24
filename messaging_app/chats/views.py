@@ -27,4 +27,4 @@ class MessageViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Message.objects.filter(Conversation__id = self.request.user)
+        return Message.objects.filters(Conversation__id = self.request.user)
