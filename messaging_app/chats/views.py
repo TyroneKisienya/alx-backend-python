@@ -6,7 +6,7 @@ from serializers import Messageserializer, Conversationserializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 
-class ConversationsViewSet(viewsets.ViewSet):
+class ConversationViewSet(viewsets.ViewSet):
     query_set = Conversation.objects.all()
     serializer_class = Conversationserializer
 
