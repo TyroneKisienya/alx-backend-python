@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import User, Message, Conversation
 
 class Userserializer(serializers.ModelSerializer):
+    user_id = serializers.SerializerMethodField()
+    email = serializers.EmailField()
     class Meta:
         model = User
         fields = (
@@ -21,14 +23,21 @@ class Userserializer(serializers.ModelSerializer):
             'role': {'default': User.roleType.GUEST
             }
         }
+        def get_name(self, obj):
+            return f'{obj.first_name} {obj.last_name}'.strip()
+        def validate_email(self, value):
+            if 'ban' in value:
+                raise serializers.ValidationError('The Email is not allowed')
+            return value
 
 class Messageserializer(serializers.ModelSerializer):
+    sender = Userserializer(read_only=True)
     class Meta:
         model = Message
         fields = (
             'message_id',
             'sender_id',
-            'message_body',
+            'content',
             'sent_at'
         )
         read_only_fields = (
@@ -37,7 +46,8 @@ class Messageserializer(serializers.ModelSerializer):
         )
 
 class Conversationserializer(serializers.ModelSerializer):
-    messages = Messageserializer(many=True)
+    messages = Messageserializer(many=True, read_only=True)
+    participant = Userserializer(many=True, read_only=True)
     class Meta:
         model = Conversation
         fields = (
