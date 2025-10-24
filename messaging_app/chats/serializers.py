@@ -4,6 +4,7 @@ from .models import User, Message, Conversation
 class Userserializer(serializers.ModelSerializer):
     user_id = serializers.SerializerMethodField()
     email = serializers.EmailField()
+    full_name = serializers.CharField()
     class Meta:
         model = User
         fields = (
