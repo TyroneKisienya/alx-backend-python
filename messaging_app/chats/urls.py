@@ -9,7 +9,7 @@ router.register(r'conversations/(?P<conversation_id>[^/.]+)/messages', MessageVi
 message_router = routers.NestedDefaultRouter(router,r'conversations', lookup='conversation')
 message_router.register(r'messages', MessageViewSet, basename='message')
 
-url_pattern = [
-    path('api/', include(router.urls)),
-    path('api/', include(message_router.urls))
+urlpatterns = [
+    path('', include(router.urls)),
+    path('', include(message_router.urls))
 ]

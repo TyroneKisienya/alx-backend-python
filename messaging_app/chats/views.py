@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from .models import Message, Conversation
-from serializers import Messageserializer, Conversationserializer
+from .serializers import Messageserializer, Conversationserializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 

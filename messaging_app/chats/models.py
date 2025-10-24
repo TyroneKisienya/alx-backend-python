@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 from django.contrib.auth.models import AbstractUser
-from .models import User
+from django.conf import settings
 
 # Create your models here.
 class User(AbstractUser):
@@ -21,11 +21,11 @@ class User(AbstractUser):
 
 class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    sender_id = models.ForeignKey(User.user_id, on_delete=models.CASCADE, related_name='sent_messages')
+    sender_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages')
     message_body = models.TextField(max_length=250)
     sent_at = models.DateTimeField(auto_now_add=True)
 
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    participants_id = models.ForeignKey(User.user_id)
+    participants_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
