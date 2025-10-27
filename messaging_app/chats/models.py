@@ -19,13 +19,19 @@ class User(AbstractUser):
     role = models.CharField(choices=roleType.choices, max_length=128, null= False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class Conversation(models.Model):
+    conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    participants_id = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='conversation')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Conversation {self.conversation_id}'
 class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     sender_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages')
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages', null=True )
     message_body = models.TextField(max_length=250)
     sent_at = models.DateTimeField(auto_now_add=True)
 
-class Conversation(models.Model):
-    conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    participants_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f'Message {self.message_id} from {self.sender_id.email}'

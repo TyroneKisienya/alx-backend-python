@@ -5,14 +5,21 @@ from .models import Message, Conversation
 from .serializers import Messageserializer, Conversationserializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+from django.db.models import Q
+from .permissions import IsConversationParticipant
 
-class ConversationViewSet(viewsets.ViewSet):
-    query_set = Conversation.objects.all()
+class ConversationViewSet(viewsets.ModelViewSet):
     serializer_class = Conversationserializer
+    permission_classes = [IsAuthenticated, IsConversationParticipant]
+
+    def get_queryset(self):
+        return Conversation.objects.filter(participants_id=self.request.user)
 
     @action(detail=True, methods=['post'], url_path='send_message')
     def send_message(self, request, pk=None):
         Conversation = self.get_object()
+
+        self.check_object_permissions(request, Conversation)
 
         serializer = Messageserializer(data=request.data)
 
@@ -27,4 +34,9 @@ class MessageViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        user = self.request.user
+        conversation = Conversation.objects.filter(participants_id = user)
         return Message.objects.filters(Conversation__id = self.request.user)
+    
+    def perform_create(self, serializer):
+        raise NotImplementedError('use the "send_message" to send a message')

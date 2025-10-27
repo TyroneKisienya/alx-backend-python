@@ -2,9 +2,7 @@ from rest_framework import serializers
 from .models import User, Message, Conversation
 
 class Userserializer(serializers.ModelSerializer):
-    user_id = serializers.SerializerMethodField()
-    email = serializers.EmailField()
-    full_name = serializers.CharField()
+    full_name = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = (
@@ -32,13 +30,13 @@ class Userserializer(serializers.ModelSerializer):
             return value
 
 class Messageserializer(serializers.ModelSerializer):
-    sender = Userserializer(read_only=True)
+    sender_id = Userserializer(read_only=True)
     class Meta:
         model = Message
         fields = (
             'message_id',
             'sender_id',
-            'content',
+            'message_body',
             'sent_at'
         )
         read_only_fields = (
@@ -48,7 +46,7 @@ class Messageserializer(serializers.ModelSerializer):
 
 class Conversationserializer(serializers.ModelSerializer):
     messages = Messageserializer(many=True, read_only=True)
-    participant = Userserializer(many=True, read_only=True)
+    participant_id = Userserializer(many=True, read_only=True)
     class Meta:
         model = Conversation
         fields = (
