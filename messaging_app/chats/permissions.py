@@ -12,5 +12,15 @@ class IsParticipantofConversation(permissions.BasePermission):
         elif hasattr(obj, 'conversation'):
             is_participant = obj.conversation.participants_id.filter(user_id = request.user.user_id).exists()
         else:
+            is_participant = False
+
+        if not is_participant:
             return False
-        return is_participant
+        
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.method in ['POST']:
+            return True
+        if request.method in['PUT','PATCH', 'DELETE']:
+            return hasattr (obj, 'sender_id') and obj.sender_id == request.user
+        return False

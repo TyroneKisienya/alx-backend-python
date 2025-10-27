@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from .models import Message, Conversation
@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.db.models import Q
 from .permissions import IsParticipantofConversation
+from rest_framework import status
 
 class ConversationViewSet(viewsets.ModelViewSet):
     serializer_class = Conversationserializer
@@ -34,8 +35,13 @@ class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsParticipantofConversation]
 
     def get_queryset(self):
-        user = self.request.user
-        return Message.objects.filters(Conversation__participants_id = user)
+        conversation_id = self.kwargs.get('conversation_id')
+        conversation = get_object_or_404(Conversation, conversation_id=conversation_id)
+        self.check_object_permissions(self.request, conversation)
+        return Message.objects.filter(conversation=conversation)
     
     def perform_create(self, serializer):
-        raise NotImplementedError('use the "send_message" to send a message')
+        conversation_id = self.kwargs.get('conversation_id')
+        conversation = get_object_or_404(Conversation, conversation_id=conversation_id)
+        self.check_object_permissions(self.request, conversation)
+        serializer.save(sender_id=self.request.user, conversation=conversation)
