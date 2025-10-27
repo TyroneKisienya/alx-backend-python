@@ -45,3 +45,5 @@ class MessageViewSet(viewsets.ModelViewSet):
         conversation = get_object_or_404(Conversation, conversation_id=conversation_id)
         self.check_object_permissions(self.request, conversation)
         serializer.save(sender_id=self.request.user, conversation=conversation)
+        return Response({"detail": "You do not have permission to perform this action."}, status=status.HTTP_403_FORBIDDEN)
+
