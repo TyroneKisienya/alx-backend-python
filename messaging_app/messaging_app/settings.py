@@ -131,8 +131,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.permissions.IsAuthenticated',
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
+        'chats.auth.JWT_Sess_AUTh',  # ✅ your custom class
     ],
     'DEFAULT_PERMISSIONS_CLASSES': [
         'rest_framework.permission.IsAuthenticated'
