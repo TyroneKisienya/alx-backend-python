@@ -1,5 +1,5 @@
 from rest_framework import permissions
 
-class IsConversationParticipant(permissions.BasePermission):
+class IsParticipantofConversation(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.participants_id.filter(user_id = request.user.user_id).exists()

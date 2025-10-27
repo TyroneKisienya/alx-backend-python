@@ -6,11 +6,11 @@ from .serializers import Messageserializer, Conversationserializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.db.models import Q
-from .permissions import IsConversationParticipant
+from .permissions import IsParticipantofConversation
 
 class ConversationViewSet(viewsets.ModelViewSet):
     serializer_class = Conversationserializer
-    permission_classes = [IsAuthenticated, IsConversationParticipant]
+    permission_classes = [IsAuthenticated, IsParticipantofConversation]
 
     def get_queryset(self):
         return Conversation.objects.filter(participants_id=self.request.user)
