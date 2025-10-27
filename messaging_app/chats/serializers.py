@@ -22,7 +22,7 @@ class Userserializer(serializers.ModelSerializer):
             'role': {'default': User.roleType.GUEST
             }
         }
-        def get_name(self, obj):
+        def get_full_name(self, obj):
             return f'{obj.first_name} {obj.last_name}'.strip()
         def validate_email(self, value):
             if 'ban' in value:
@@ -46,7 +46,7 @@ class Messageserializer(serializers.ModelSerializer):
 
 class Conversationserializer(serializers.ModelSerializer):
     messages = Messageserializer(many=True, read_only=True)
-    participant_id = Userserializer(many=True, read_only=True)
+    participants_id = Userserializer(many=True, read_only=True)
     class Meta:
         model = Conversation
         fields = (

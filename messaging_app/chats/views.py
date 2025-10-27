@@ -24,19 +24,18 @@ class ConversationViewSet(viewsets.ModelViewSet):
         serializer = Messageserializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save(Conversation.conversation, sender=request.user)
+            serializer.save(Conversation.conversation, sender_id=request.user)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
-class MessageViewSet(viewsets.ViewSet):
-    query_set = Message.objects.all()
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
     serializer_class = Messageserializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        conversation = Conversation.objects.filter(participants_id = user)
-        return Message.objects.filters(Conversation__id = self.request.user)
+        return Message.objects.filters(Conversation__participants_id = user)
     
     def perform_create(self, serializer):
         raise NotImplementedError('use the "send_message" to send a message')
