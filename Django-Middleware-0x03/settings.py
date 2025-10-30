@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'chats.middleware.RequestLoggingMiddleware'
     'chats.middleware.RestrictAccessByTimeMiddleware'
+    'chats.middleware.OffensiveLanguageMiddleware'
 ]
 
 ROOT_URLCONF = 'messaging_app.urls'
@@ -155,3 +156,8 @@ SIMPLE_jwt = {
 }
 
 AUTH_USER_MODEL = 'chats.User'
+
+CACHES = {
+    'default': {'django.core.cache.backend.locmem.LocMemCache'
+    }
+}
