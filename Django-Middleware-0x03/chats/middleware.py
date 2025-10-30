@@ -76,3 +76,18 @@ class OffensiveLanguageMiddleware:
 
         response = self.get_response(request)
         return response
+
+class RolePermissionMiddleware:
+    def __init__(self, get_response):
+        self.get_reponse = get_response
+        self.protected_path = [
+            'admin/'
+        ]
+    
+    def __call__(self, request):
+        if any(request.path.startswith(path) for path in self.protected_path):
+            user = request.user
+            if not (user.is_authenticated) or (user.superuser):
+                return HttpResponseForbidden('Unable to view not authorised')
+            response = self.get_reponse(request)
+            return response
