@@ -77,7 +77,7 @@ class OffensiveLanguageMiddleware:
         response = self.get_response(request)
         return response
 
-class RolePermissionMiddleware:
+class RolepermissionMiddleware:
     def __init__(self, get_response):
         self.get_reponse = get_response
         self.protected_path = [
