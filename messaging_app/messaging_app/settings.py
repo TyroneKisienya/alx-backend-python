@@ -131,10 +131,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'chats.auth.JWT_Sess_AUTh',  # ✅ your custom class
+        'chats.auth.JWT_Sess_AUTh',
     ],
     'DEFAULT_PERMISSIONS_CLASSES': [
-        'rest_framework.permission.IsAuthenticated'
+        'rest_framework.permission.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': [
+        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        'PAGE_SIZE': 20
     ]
 }
 
