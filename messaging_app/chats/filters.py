@@ -5,7 +5,7 @@ from messaging_app.chats import models
 class MessageFilter(django_filters.filterset):
 
     username = django_filters.CharFilter(
-        method= 'filter_by_conversation_user'
+        method= 'filter_by_conversation_user',
         label= 'Filter by a specific user\s username'
     )
     created_at = django_filters.DateFromToRangeFilter()
