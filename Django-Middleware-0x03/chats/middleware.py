@@ -27,7 +27,7 @@ class RequestLoggingMiddleware:
 
         return response
     
-class RequestAccessByTimeMiddleware:
+class RestrictAccessByTimeMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
         self.forbid_start = time(21, 0)
