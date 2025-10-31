@@ -38,6 +38,7 @@ def cleanup(sender, instance, **kwargs):
 
     print(f'Deleted: {username} (ID: {id} starting cleanup)')
     deleted_notify, notify_details = Notification.objects.filter(
-        recipient = instance).delete()
+        recipient = instance).delete(), Message.objects.filter(
+            recipient = instance).delete()
     print(f'deleted {deleted_notify}')
     print(f'data cleanup for {username}')
