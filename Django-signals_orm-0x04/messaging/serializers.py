@@ -10,4 +10,8 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         models  = Notification
         fields  =['message', 'content']
-        
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        models = Message
+        fields = ['sender', 'content', 'timestamp']
