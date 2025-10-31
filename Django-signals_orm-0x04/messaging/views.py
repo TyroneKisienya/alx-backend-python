@@ -20,7 +20,6 @@ class MessageViewset(viewsets.ModelViewSet):
     def history(self, request, pk=None):
         message =get_object_or_404(Message, pk=pk)
         history_records = message.history.all()
-        sender = request.user
 
         serializer = MessageSerializer(history_records, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
