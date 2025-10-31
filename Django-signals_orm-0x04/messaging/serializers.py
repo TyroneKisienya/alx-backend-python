@@ -6,3 +6,8 @@ class MessageHistoryserializer(serializers.ModelSerializer):
         models = MessageHistory
         fields = ['old_content', 'edited_at', 'edited_by']
 
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        models  = Notification
+        fields  =['message', 'content']
+        
