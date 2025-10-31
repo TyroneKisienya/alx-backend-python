@@ -6,10 +6,14 @@ from rest_framework.response import Response
 from .models import AbstractUser, Message, MessageHistory, Notification
 from .serializers import MessageSerializer, MessageHistoryserializer, NotificationSerializer
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Prefetch
 
 # Create your views here.
 class MessageViewset(viewsets.ModelViewSet):
-    queryset = Message.objects.all().order_by('-timestamp')
+    queryset = Message.objects.filter(parent_message_isnull = True).select_related(
+        'sender', 'recipient', 'parent_message').prefetch_related('history', 'replies',Prefetch(
+            'replies__replies'
+        ))
     serializer_class = MessageSerializer
 
     @action(detail=True, methods=['GET'])
