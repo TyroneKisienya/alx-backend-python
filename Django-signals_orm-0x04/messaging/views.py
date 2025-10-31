@@ -40,7 +40,7 @@ class InboxViewset(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Message.objects.all_messages(self.request.user)
+        return Message.objects.only(self.request.user)
     
     @action(detail=False, methods=['GET'])
     def unread(self, request):
