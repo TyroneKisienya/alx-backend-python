@@ -16,13 +16,14 @@ class Message(models.Model):
 class MessageHistory(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='history')
     old_content = models.CharField()
-    change_timestamp = models.DateTimeField(auto_now_add=True)
+    edited_at = models.DateTimeField(auto_now_add=True)
+    edited_by = models.ForeignKey(AbstractUser, on_delete=models.CASCADE, related_name='username')
     class Meta:
-        ordering = ['-change_timestamp']
+        ordering = ['-edited_at']
         verbose_plural_name = 'Message_History'
 
         def __str__(self):
-            return f'message: {self.id} at {self.change_timestamp.strftime('%Y-%m-%d %H-%m')}'
+            return f'message: {self.id} at {self.edited_at.strftime('%Y-%m-%d %H-%m')}'
 class Notification(models.Model):
     recipient = models.ForeignKey(AbstractUser, on_delete=models.CASCADE, related_name='notifications')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, null=True)
