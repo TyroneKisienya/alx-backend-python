@@ -1,5 +1,5 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from .models import Message, Notification, MessageHistory
 from django.contrib.auth.models import AbstractUser
 
@@ -30,3 +30,14 @@ def sms_history(sender,instance, **kwargs):
                 print(f'Message hostory {instance.pk}')
         except Message.DoesNotExist:
             pass
+
+@receiver(post_delete, sender = AbstractUser)
+def cleanup(sender, instance, **kwargs):
+    user_id = instance.id
+    username = instance.username
+
+    print(f'Deleted: {username} (ID: {id} starting cleanup)')
+    deleted_notify, notify_details = Notification.objects.filter(
+        recipient = instance).delete()
+    print(f'deleted {deleted_notify}')
+    print(f'data cleanup for {username}')
