@@ -8,7 +8,21 @@ class Message(models.Model):
     receiver = models.ForeignKey(AbstractUser, default=uuid.uuid4, related_name='received_messages')
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add = True)
+    edited = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f'message: {self.id} (edited: {self.edited})'
+    
+class MessageHistory(models.Model):
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='history')
+    old_content = models.CharField()
+    change_timestamp = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-change_timestamp']
+        verbose_plural_name = 'Message_History'
+
+        def __str__(self):
+            return f'message: {self.id} at {self.change_timestamp.strftime('%Y-%m-%d %H-%m')}'
 class Notification(models.Model):
     recipient = models.ForeignKey(AbstractUser, on_delete=models.CASCADE, related_name='notifications')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, null=True)
