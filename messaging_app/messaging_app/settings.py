@@ -152,4 +152,11 @@ SIMPLE_jwt = {
     'AUTH_HEADER_TYPES': ('bearer',)
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backend.locmem.locMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
 AUTH_USER_MODEL = 'chats.User'
