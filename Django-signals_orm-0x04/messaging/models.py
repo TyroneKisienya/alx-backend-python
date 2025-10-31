@@ -9,6 +9,14 @@ class Message(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add = True)
     edited = models.BooleanField(default=False)
+    parent_message = models.ForeignKey(
+        'self',
+        null = False,
+        on_delete=models.set_Null,
+        related_name='replies'
+    )
+    class Meta:
+        ordering = ['timestamp']
 
     def __str__(self):
         return f'message: {self.id} (edited: {self.edited})'
