@@ -1,6 +1,6 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_save
-from .models import Message, Notification
+from django.db.models.signals import post_save, pre_save
+from .models import Message, Notification, MessageHistory
 from django.contrib.auth.models import AbstractUser
 
 @receiver(post_save, sender = Message)
@@ -15,3 +15,18 @@ def notify(sender, instance, created, **kwargs):
             content = content
         )
         print(f'Notification for {recipient_user.username}')
+
+@receiver(pre_save, sender = Message)
+def sms_history(sender,instance, **kwargs):
+    if instance.pk:
+        try:
+            old_instance = Message.objects.get(pk = instance.pk)
+            if old_instance.content != instance.content:
+                MessageHistory.objects.create(
+                    message = instance,
+                    old_content = old_instance.content
+                )
+                instance.edited = True
+                print(f'Message hostory {instance.pk}')
+        except Message.DoesNotExist:
+            pass
