@@ -7,6 +7,7 @@ from .models import AbstractUser, Message, MessageHistory, Notification
 from .serializers import MessageSerializer, MessageHistoryserializer, NotificationSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Prefetch
+from .managers import UnreadMessagesManager
 
 # Create your views here.
 class MessageViewset(viewsets.ModelViewSet):
@@ -33,3 +34,16 @@ class Accountdelete(APIView):
         return Response(
             {'details: delete_user'}, status= status.HTTP_204_NO_CONTENT
         )
+    
+class InboxViewset(viewsets.ReadOnlyModelViewSet):
+    serializer = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Message.objects.all_messages(self.request.user)
+    
+    @action(detail=False, methods=['GET'])
+    def unread(self, request):
+        unread_messages = Message.objects.unread_messages(request.user)
+        serializer = self.get_serializer(unread_messages, many = True)
+        return Response(serializer.data)
