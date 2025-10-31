@@ -44,6 +44,6 @@ class InboxViewset(viewsets.ReadOnlyModelViewSet):
     
     @action(detail=False, methods=['GET'])
     def unread(self, request):
-        unread_messages = Message.objects.unread_messages(request.user)
+        unread_messages = Message.unread.unread_for_user(request.user)
         serializer = self.get_serializer(unread_messages, many = True)
         return Response(serializer.data)
