@@ -6,17 +6,17 @@ COPY  requirements.txt ./
 
 RUN apt-get update && apt-get install -y \
     build-essential \
-    libmysqlclient-dev \
     pkg-config \
     python3-dev \
     libcairo2-dev \
     libgirepository1.0-dev \
     gir1.2-gtk-3.0 \
+    default-libmysqlclient-dev \
     libdbus-1-dev \
     libdbus-glib-1-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --default-timeout=120 --retries=5 -r requirements.txt
+RUN pip install --no-cache-dir --default-timeout=120 --retries=5 -r requirements.txt
 
 COPY . .
 
