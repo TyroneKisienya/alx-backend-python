@@ -1,10 +1,16 @@
 FROM python:3.10
 
-WORKDIR /home/skai/Desktop/alx-backend-python/messaging_app
+WORKDIR /messaging_app
 
 COPY  requirements.txt ./
 
-RUN pip install -r requirements.txt
+RUN apt-get update && apt-get install -y \
+    default-libmysqlclient-dev \
+    build-essential \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --default-timeout=120 --retries=5 -r requirements.txt
 
 COPY . .
 

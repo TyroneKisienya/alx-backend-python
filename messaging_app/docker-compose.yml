@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0.11
+    restart: always
+    env_file: .env
+    environment:
+      MSQL_USER: ${MSQL_USER}
+      MSQL_PASSWORD: ${MSQL_PASSWORD}
+      MSQL_DATABASE: ${MSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+  web:
+    build: .
+    command: python3 manage.py runserver
+    volumes:
+      - ".:/messaging_app"
+    depends_on:
+      - db
+    env_file: .env
+    environment:
+      - MSQL_DATABASE=${MSQL_DATABASE}
+      - MSQL_USER=${MSQL_USER}
+      - MSQL_PASSWORD=${MSQL_PASSWORD}
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+volumes:
+    mysql_data:
