@@ -8,7 +8,7 @@ services:
     environment:
       MYSQL_USER: ${MSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_DB: ${MYSQL_DB}
     ports:
       - "3306:3306"
     volumes:
@@ -22,7 +22,7 @@ services:
       - db
     env_file: .env
     environment:
-      - MYSQL_DATABASE=${MSQL_DATABASE}
+      - MYSQL_DB=${MSQL_DB}
       - MYSQL_USER=${MSQL_USER}
       - MYSQL_PASSWORD=${MSQL_PASSWORD}
       - MYSQL_HOST=db
