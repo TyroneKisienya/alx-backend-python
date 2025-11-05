@@ -6,9 +6,9 @@ services:
     restart: always
     env_file: .env
     environment:
-      MSQL_USER: ${MSQL_USER}
-      MSQL_PASSWORD: ${MSQL_PASSWORD}
-      MSQL_DATABASE: ${MSQL_DATABASE}
+      MYSQL_USER: ${MSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - "3306:3306"
     volumes:
@@ -22,9 +22,9 @@ services:
       - db
     env_file: .env
     environment:
-      - MSQL_DATABASE=${MSQL_DATABASE}
-      - MSQL_USER=${MSQL_USER}
-      - MSQL_PASSWORD=${MSQL_PASSWORD}
+      - MYSQL_DATABASE=${MSQL_DATABASE}
+      - MYSQL_USER=${MSQL_USER}
+      - MYSQL_PASSWORD=${MSQL_PASSWORD}
       - MYSQL_HOST=db
       - MYSQL_PORT=3306
 volumes:
