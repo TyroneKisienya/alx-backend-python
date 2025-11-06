@@ -1,0 +1,31 @@
+#!/bin/bash
+
+DEPLOYMENT="drf-app-deployment"
+NAMESPACE="default"
+SERVICE= "messaging_app_service"
+SERVICE_PORT=8000
+
+echo "Scaling deployment '$DEPLOYMENT' to 3 Replicas"
+kuectl scale deployment "$DEPLOYMENT" --replicas=3 -n "$NAMESPACE"
+
+echo "Waiting for pods to scale"
+sleep 5
+
+echo "Checking running pods"
+kuectl get pods -n "$NAMESPACE"
+
+echo "Getting ClusterIP"
+CLUSTER_IP=$(kubectl get svc "$SERVICE_NAME" -n "$NAMESPACE" -o jsonpath='{.spec.clusterIP}')
+
+echo "django internal url: http://$CLUSTER_IP:$SERVICE_PORT/"
+
+echo "Runnig load test"
+echo "Test duration: 10 seconds | Threads: 2 | Connections:20"
+wrk -t2 -c20 -d10s https://$CLUSTER_IP:$SERVICE_PORT/
+
+echo " "
+echo "Checking resource usage"
+kubectl top pods -n "$NAMESPACE"
+
+echo " "
+echo "Success"
