@@ -1,28 +1,32 @@
-apiVersion: app/v1
-
-kind: deployment
-
-metadata: 
-  name: drf-app-deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-blue
   labels:
-    app: messaging_app
-
-spec: 
-  replicas: 3
-  selector: 
-    app: messaging_app
+    app: messaging-app
     version: blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: messaging-app
+      version: blue
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0         # ✅ ensures zero downtime
+      maxSurge: 1               # ✅ adds one extra pod temporarily
   template:
     metadata:
       labels:
-        app: messaging_app
+        app: messaging-app
         version: blue
-    spec:
-      containers:
-      - name: drf_app_container
-        image: messaging_app:blue
-        ports:
-        - containerport: 8000
-        envFrom:
-        - secretRef:
-            name:: mysql-secret
+      spec:
+        containers:
+        - name: django-blue-container
+          image: messaging_app:2.0      # ✅ NEW VERSION
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: mysql-secret
