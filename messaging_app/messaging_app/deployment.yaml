@@ -1,0 +1,26 @@
+apiVersion: app/v1
+
+kind: deployment
+
+metadata: 
+  name: drf-app-deployment
+  labels:
+    app: messaging_app
+
+spec: 
+  replicas: 3
+  selector: 
+    app: messaging_app
+  template:
+    metadata:
+      labels:
+        app: messaging_app
+    spec:
+      containers:
+      - name: drf_app_container
+        image: messaging_app:latest
+        ports:
+        - containerport: 8000
+        envFrom:
+        - secretRef:
+            name:: mysql-secret
