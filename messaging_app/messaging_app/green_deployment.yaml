@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-green
+  labels:
+    app: messaging-app
+    version: green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: messaging-app
+      version: green
+  template:
+    metadata:
+      labels:
+        app: messaging-app
+        version: green
+      spec:
+        containers:
+        - name: django-green-container
+          image: messaging_app:green   # New image version
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: mysql-secret

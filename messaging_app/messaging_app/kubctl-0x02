@@ -1,0 +1,29 @@
+#!/bin/bash
+
+echo "🚀 Starting Blue-Green Deployment Process..."
+
+echo "🔵 Deploying BLUE version..."
+kubectl apply -f blue_deployment.yaml
+
+echo "🟢 Deploying GREEN version..."
+kubectl apply -f green_deployment.yaml
+
+echo "⏳ Waiting for pods to start..."
+sleep 10
+
+echo "📦 Current Pods:"
+kubectl get pods -l app=messaging-app
+
+echo ""
+echo "🔍 Checking logs for GREEN version..."
+GREEN_POD=$(kubectl get pods -l version=green -o jsonpath='{.items[0].metadata.name}')
+kubectl logs "$GREEN_POD"
+
+echo ""
+echo "✅ If green is stable, switch service by editing kubeservice.yaml:"
+echo "    version: green"
+echo ""
+echo "Then run:"
+echo "    kubectl apply -f kubeservice.yaml"
+echo ""
+echo "✅ Deployment completed with monitoring."
