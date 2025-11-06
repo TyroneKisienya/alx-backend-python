@@ -2,7 +2,7 @@
 
 set e
 
-echo "Starting Cluster using mikikube"
+echo "Starting Cluster using minikube"
 
 minikube start
 
