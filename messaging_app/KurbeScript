@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set e
+
+echo "Starting Cluster using mikikube"
+
+minikube start
+
+echo "minikube cluster started"
+
+echo "Checking Status"
+
+kubectl cluster-info
+
+echo "Retrieving all existing pods"
+
+kubectl get pods --all-namespaces
+
+echo "all events running"
