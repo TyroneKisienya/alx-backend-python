@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    environment {
+        VENV_DIR = 'venv'
+    }
+
+    stages {
+        stage('checkout') {
+            steps {
+                git branch: 'main',
+                credentialsID: 'github-credentials',
+                url: 'https://github.com/TyroneKisienya/alx-backend-python.git'
+            }
+        }
+        stage('Setup Python Environment') {
+            steps {
+                // shining panda in use
+                script {
+                    def python = tool name: 'Python 3', type: 'hudson.plugins.shiningpanda.tools.PythonInstallation'
+                    env.PATH = '${python}/bin:${env.PATH}'
+                }
+
+                sh '''
+                    python3 -m venv ${VENV_DIR}
+                    source ${VENV_DIR}/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    '''
+            }
+        }
+        stage('RUn Tests') {
+            steps {
+                sh '''
+                source ${VENV_DIR}/bin/activate
+                pytest --junitxml=report.xml
+                '''
+            }
+        }
+        stage('Publish Test Report') {
+            steps {
+                junit 'report.xml'
+            }
+        }
+        stage('Manual Approval') {
+            steps {
+                input message: 'Do you want to continue to deploy?', ok: 'Yes, continue'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished Cleaning up'
+            sh 'deactivate || true' 
+        }
+    }
+}
